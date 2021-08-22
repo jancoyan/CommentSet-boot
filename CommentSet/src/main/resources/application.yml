@@ -1,1 +1,17 @@
 
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///commentset?serverTimezone=UTC&characterEncoding=utf-8
+    username: root
+    password: 333
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+logging:
+  level:
+    com.jancoyan.commentset.mapper: debug
+server:
+  port: 8888

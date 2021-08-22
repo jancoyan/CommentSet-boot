@@ -3,9 +3,9 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "短句集",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": true
+				"navigationBarTitleText": "短句集"
+				// "enablePullDownRefresh": true,
+				// "onReachBottomDistance": true
 			}
 		}
 	    ,{

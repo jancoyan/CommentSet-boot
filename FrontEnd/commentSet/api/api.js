@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8080'
+const BASE_URL = 'http://localhost:8888'
 
 export const myRequest = (options)=>{
 	return new Promise((resolve,reject)=>{
@@ -7,17 +7,17 @@ export const myRequest = (options)=>{
 			method: options.method || 'GET',
 			data: options.data || {},
 			success: (res) => {
-				if(res.data.status !== 0){
-					return uni.showToast({
-						title:'获取数据失败'
-					})
-				}
+				// if(res.code !== 0){
+				// 	return uni.showToast({
+				// 		title:'获取数据失败'
+				// 	})
+				// }
 				resolve(res)
 			},
 			fail: (err) => {
-				return uni.showToast({
-					title:'获取数据失败'
-				})
+				// return uni.showToast({
+				// 	title:'获取数据失败'
+				// })
 				reject(err)
 			}
 		})
