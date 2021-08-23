@@ -1,5 +1,6 @@
 package com.jancoyan.commentset.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -38,5 +39,8 @@ public class Comment extends Model<Comment> {
     private Integer commentLikeCount;
 
     private Integer commentCollectCount;
+
+    @TableField(exist = false)
+    private String userName;
 
 }

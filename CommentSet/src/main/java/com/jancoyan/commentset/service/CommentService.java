@@ -9,4 +9,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2021-08-22
  */
 public interface CommentService extends IService<Comment> {
+    IPage<Comment> selectIndexComment(Integer page, Integer limit, String search);
 }
