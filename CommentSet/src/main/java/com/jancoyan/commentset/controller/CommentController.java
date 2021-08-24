@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.event.InternalFrameAdapter;
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 
 /**
@@ -35,7 +38,9 @@ public class CommentController {
 
     @RequestMapping(value = "/post")
     public Msg submitComment(
-            @RequestParam(name = "content") String content){
+            @RequestParam(name = "content") String content,
+            HttpServletRequest request) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("utf-8");
         System.out.println(content);
         // 组装
         Comment comment = new Comment();
@@ -51,6 +56,23 @@ public class CommentController {
         }else {
             return Msg.fail();
         }
+    }
+
+
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Msg batchdelete(String ids){
+        System.out.println(ids);
+        String[] splits = ids.split("&");
+
+        Comment comment = new Comment();
+
+        for(String split: splits){
+            if (!"".equals(split))
+            comment.setCommentId(Integer.parseInt(split));
+            comment.deleteById();
+        }
+
+        return Msg.success();
     }
 
 }

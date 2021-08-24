@@ -38,6 +38,7 @@
 				<u-cell-item icon="setting" title="设置"></u-cell-item>
 			</u-cell-group>
 		</view>
+		<u-tabbar :list="tabbar" :mid-button="true" active-color=#5098FF></u-tabbar>	
 	</view>
 </template>
 
@@ -50,7 +51,26 @@
 			}
 		},
 		onLoad() {
-			
+			this.tabbar = [{
+					iconPath: "/static/icon/home.png",
+					selectedIconPath: "/static/icon/home-active.png",
+					text: '逛逛',
+					pagePath: "/pages/index/index"
+				},
+				{
+					iconPath: "/static/icon/add.png",
+					selectedIconPath: "/static/icon/add-active.png",
+					text: '发布',
+					midButton: true,
+					pagePath: "/pages/add/add"
+				},
+				{
+					iconPath: "/static/icon/member.png",
+					selectedIconPath: "/static/icon/member-active.png",
+					text: '我的',
+					pagePath: "/pages/home/home"
+				}
+			]
 		},
 		methods: {
 			

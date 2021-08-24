@@ -3,8 +3,8 @@
 		<view class="top"></view>
 		<view class="content">
 			<view class="title">登录</view>
-			<input class="u-border-bottom" type="number" v-model="tel" placeholder="请输入手机号" />
-			<input class="u-border-bottom" type="number" v-model="tel" placeholder="请输入密码" />
+			<input class="u-border-bottom" type="number" v-model="tel" placeholder="请输入账号" />
+			<input class="u-border-bottom" type="password" v-model="tel" placeholder="请输入密码" />
 			<button @tap="submit" class="getCaptcha">登录</button>
 		</view>
 	</view>

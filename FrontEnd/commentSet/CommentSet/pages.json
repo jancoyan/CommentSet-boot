@@ -6,7 +6,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "逛逛"
+				"navigationBarTitleText": "逛逛",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -24,6 +25,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/add/add",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "写随笔",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -33,14 +43,21 @@
 	},
 	"tabBar": {
 		"color": "#7A7E83",
-		"selectedColor": "#55ffff",
+		"selectedColor": "#5098ff",
 		"borderStyle": "white",
 		"backgroundColor": "#F8F8F8",
-		"list": [{
+		"list": [
+			{
 				"pagePath": "pages/index/index",
 				"iconPath": "static/icon/home.png",
 				"selectedIconPath": "static/icon/home-active.png",
 				"text": "逛逛"
+			},
+			{
+				"pagePath": "pages/add/add",
+				"iconPath": "static/icon/add.png",
+				"selectedIconPath": "static/icon/add-active.png",
+				"text": "发布"
 			},
 			{
 				"pagePath": "pages/home/home",

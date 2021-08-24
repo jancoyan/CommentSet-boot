@@ -2,9 +2,19 @@
 	<view>
 		<view class="wrap">
 			<view class="u-tabs-box">
-				<u-tabs-swiper activeColor="#0aff78" ref="tabs" :list="list" :current="current" @change="change" :is-scroll="false" swiperWidth="750"></u-tabs-swiper>
+				<u-tabs-swiper 
+					activeColor="#5098ff" 
+					ref="tabs" 
+					:list="list" 
+					:current="current" 
+					@change="change" 
+					:is-scroll="false" 
+					swiperWidth="750"></u-tabs-swiper>
 			</view>
-			<swiper class="swiper-box" :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish">
+			<swiper class="swiper-box" 
+				:current="swiperCurrent" 
+				@transition="transition" 
+				@animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
 					<scroll-view scroll-y @scrolltolower="reachBottom">
 						<u-card v-for="(item,index) in commentList[0]" :key="item.commentId" :show-head="false">
@@ -13,12 +23,12 @@
 							</view>
 							<view class="info" slot="foot">
 								<view class="author"> {{item.userName}} </view>
-								<view class="date"> {{dateFormat(item.postDate)}} </view>
+								<view class="date"> {{item.postDate}} </view>
 								<!-- <view class="like"> 点赞 </view> -->
 								<!-- <view class="collect"> 收藏 </view> -->
 							</view>
 						</u-card>
-						<u-loadmore :status="loadStatus[0]" bgColor="#f2f2f2"></u-loadmore>
+						<u-loadmore :status="loadStatus[0]"  bgColor="#f2f2f2" :load-text="loadText"></u-loadmore>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item class="swiper-item">
@@ -32,6 +42,7 @@
 				</swiper-item>
 			</swiper>
 		</view>
+		<u-tabbar :list="tabbar" :mid-button="true" active-color=#5098FF></u-tabbar>	
 	</view>
 </template>
 
@@ -55,48 +66,86 @@ export default {
 					name: '某音热评'
 				}
 			],
+			// 每一个swiper当前的页码
+			currentPage: [0, 0, 0, 0],
+			// 最大页码
+			maxPage: [1, 1, 1, 1],
+			// 滑动用的, swipercurrent 和 current 都是当前所在swiper
 			current: 0,
 			swiperCurrent: 0,
-			tabsHeight: 0,
 			dx: 0,
+			// tabsHeight: 0,
 			loadStatus: ['loadmore','loadmore','loadmore','loadmore'],
+			loadText:{
+				loadmore: '轻轻上拉加载更多',
+				loading: '努力加载中',
+				nomore: '实在没有了'
+			}
 		};
 	},
 	onLoad() {
-		// 获取第一个页面的数据
-		this.getOrderList(0);
+		this.tabbar = [{
+				iconPath: "/static/icon/home.png",
+				selectedIconPath: "/static/icon/home-active.png",
+				text: '逛逛',
+				pagePath: "/pages/index/index"
+			},
+			{
+				iconPath: "/static/icon/add.png",
+				selectedIconPath: "/static/icon/add-active.png",
+				text: '发布',
+				midButton: true,
+				pagePath: "/pages/add/add"
+			},
+			{
+				iconPath: "/static/icon/member.png",
+				selectedIconPath: "/static/icon/member-active.png",
+				text: '我的',
+				pagePath: "/pages/home/home"
+			}
+		]
+		// 获取每一个页面的数据
+		this.getOrderList(this.currentPage[0]);
+		// this.getOrderList(this.currentPage[1]);
+		// this.getOrderList(this.currentPage[2]);
+		// this.getOrderList(this.currentPage[3]);
 	},
 	computed: {
-		// 价格小数
-		dateFormat() {
-			return val =>{
-				return val.substr(0,10) 
-			}
-		},
-		// 价格整数
-		priceInt() {
-			return val => {
-				if (val !== parseInt(val)) return val.split('.')[0];
-				else return val;
-			};
+		// 日期格式化
+		// dateFormat() {
+		// 	return val =>{
+		// 		return val
+		// 	}
+		// }
+	},
+	onReachBottom() {
+		// 改变当前状态
+		if(this.currentPage[this.current] >= this.maxPage[this.current]){
+			this.loadStatus.splice(this.current,1,"nomore")
+			return
 		}
+		this.loadStatus.splice(this.current,1,"loading")
+		this.getOrderList(this.currentPage[this.current] + 1)
+	},
+	onPullDownRefresh() {
+		console.log("下拉刷新")
+		setTimeout(()=>{
+			uni.stopPullDownRefresh()
+		}, 1000)
 	},
 	methods: {
-		reachBottom() {
-			// 此tab为空数据
-			if(this.current != 2) {
-				this.loadStatus.splice(this.current,1,"loading")
-				setTimeout(() => {
-					this.getOrderList(this.current);
-				}, 1200);
-			}
-		},
 		// 页面数据
-		async getOrderList(idx) {
+		async getOrderList(page) {
 			// 请求数据并赋值
-			await this.$u.get('/comment/all', {}).then(res => {
-				this.commentList[0] = res.pageInfo.records
-				// console.log(this.commentList[0])
+			await this.$u.get('/comment/all', {page: page,limit:5}).then(res => {
+				let pageInfo = res.pageInfo
+				let records = pageInfo.records
+				for (let i = 0; i < records.length; i++) {
+					records[i].postDate = records[i].postDate.substr(0, 10)
+					this.commentList[this.current].push(JSON.parse(JSON.stringify(records[i])))
+				}
+				this.maxPage[this.current] = pageInfo.pages
+				this.currentPage[this.current] += 1
 			});
 			this.loadStatus.splice(this.current,1,"loadmore")
 		},
@@ -139,7 +188,8 @@ page {
 .wrap {
 	display: flex;
 	flex-direction: column;
-	height: calc(100vh + var(--window-top));
+	height: calc(100vh - var(--window-top));
+	// height: 750rpx;
 	width: 100%;
 }
 .swiper-box {
@@ -147,5 +197,6 @@ page {
 }
 .swiper-item {
 	height: 100%;
+	display: flex;
 }
 </style>
