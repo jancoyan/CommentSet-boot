@@ -24,8 +24,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class Collection extends Model<Collection> {
 
-    private static final long serialVersionUID = 1L;
-
     private Integer collectionId;
 
     private Integer userId;

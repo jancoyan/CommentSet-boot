@@ -42,7 +42,8 @@
 				</swiper-item>
 			</swiper>
 		</view>
-		<u-tabbar :list="tabbar" :mid-button="true" active-color=#5098FF></u-tabbar>	
+		
+		<u-tabbar :list="tabbar" :mid-button="true" active-color=#5098FF></u-tabbar>
 	</view>
 </template>
 
@@ -105,7 +106,7 @@ export default {
 			}
 		]
 		// 获取每一个页面的数据
-		this.getOrderList(this.currentPage[0]);
+		this.getOrderList(this.currentPage[0] + 1);
 		// this.getOrderList(this.currentPage[1]);
 		// this.getOrderList(this.currentPage[2]);
 		// this.getOrderList(this.currentPage[3]);
@@ -118,18 +119,13 @@ export default {
 		// 	}
 		// }
 	},
-	onReachBottom() {
-		// 改变当前状态
-		if(this.currentPage[this.current] >= this.maxPage[this.current]){
-			this.loadStatus.splice(this.current,1,"nomore")
-			return
-		}
-		this.loadStatus.splice(this.current,1,"loading")
-		this.getOrderList(this.currentPage[this.current] + 1)
-	},
 	onPullDownRefresh() {
-		console.log("下拉刷新")
+		this.commentList[this.current] = []
+		this.currentPage[this.current] = 0
+		this.maxPage[this.current] = 1
+		
 		setTimeout(()=>{
+			this.getOrderList(0)
 			uni.stopPullDownRefresh()
 		}, 1000)
 	},
@@ -161,6 +157,14 @@ export default {
 			this.$refs.tabs.setFinishCurrent(current);
 			this.swiperCurrent = current;
 			this.current = current;
+		},
+		reachBottom(){
+			if(this.currentPage[this.current] >= this.maxPage[this.current]){
+				this.loadStatus.splice(this.current,1,"nomore")
+				return
+			}
+			this.loadStatus.splice(this.current,1,"loading")
+			this.getOrderList(this.currentPage[this.current] + 1)
 		}
 	}
 };

@@ -25,8 +25,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class Comment extends Model<Comment> {
 
-    private static final long serialVersionUID = 1L;
-
     @TableId(value = "comment_id", type = IdType.AUTO)
     private Integer commentId;
 

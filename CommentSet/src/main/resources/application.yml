@@ -2,7 +2,7 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql:///commentset
+    url: jdbc:mysql://101.201.64.102:3306/commentset
     username: root
     password: 333
   devtools:

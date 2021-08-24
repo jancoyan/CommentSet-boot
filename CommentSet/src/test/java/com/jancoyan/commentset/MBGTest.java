@@ -36,7 +36,7 @@ public class MBGTest {
         DataSourceConfig dataSourceConfig = new DataSourceConfig();
         dataSourceConfig.setDbType(DbType.MYSQL)
                 .setDriverName("com.mysql.cj.jdbc.Driver")
-                .setUrl("jdbc:mysql:///commentSet?serverTimezone=UTC&characterEncoding=utf-8")
+                .setUrl("jdbc:mysql://101.201.64.102:3306/commentset?serverTimezone=UTC&characterEncoding=utf-8")
                 .setUsername("root")
                 .setPassword("333");
 
@@ -44,10 +44,10 @@ public class MBGTest {
         StrategyConfig strategyConfig = new StrategyConfig();
         strategyConfig.setTablePrefix("tbl_")
                 .setColumnNaming(NamingStrategy.underline_to_camel)
-                .setInclude("tbl_collection")
-                .setInclude("tbl_collection_comment")
-                .setInclude("tbl_comment")
-                .setInclude("tbl_user");
+                .setInclude("tbl_type")
+                .setInclude("tbl_comment_type");
+//                .setInclude("tbl_comment")
+//                .setInclude("tbl_user");
 
 //        包名策略配置
         PackageConfig packageConfig = new PackageConfig();
