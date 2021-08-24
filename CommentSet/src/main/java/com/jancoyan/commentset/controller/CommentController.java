@@ -29,16 +29,16 @@ public class CommentController {
 
     @RequestMapping(value = "/all")
     public Msg getIndexComment(
-            @RequestParam(name = "page", defaultValue = "1") Integer page,
-            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
-            @RequestParam(name = "search", defaultValue = "") String search){
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "limit", defaultValue = "10") Integer limit,
+            @RequestParam(value = "search", defaultValue = "") String search){
         IPage<Comment> iPage = service.selectIndexComment(page, limit, search);
         return Msg.success().add("pageInfo", iPage);
     }
 
     @RequestMapping(value = "/post")
     public Msg submitComment(
-            @RequestParam(name = "content") String content,
+            @RequestParam(value = "content") String content,
             HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");
         System.out.println(content);
@@ -58,22 +58,22 @@ public class CommentController {
         }
     }
 
-
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Msg batchdelete(String ids){
-        System.out.println(ids);
         String[] splits = ids.split("&");
 
         Comment comment = new Comment();
 
         for(String split: splits){
-            if (!"".equals(split))
-            comment.setCommentId(Integer.parseInt(split));
-            comment.deleteById();
+            if (!"".equals(split)){
+                comment.setCommentId(Integer.parseInt(split));
+                comment.deleteById();
+            } else break;
         }
 
         return Msg.success();
     }
+
 
 }
 

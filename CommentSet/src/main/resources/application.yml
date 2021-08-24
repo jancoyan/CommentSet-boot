@@ -5,6 +5,8 @@ spring:
     url: jdbc:mysql://101.201.64.102:3306/commentset
     username: root
     password: 333
+  thymeleaf:
+    cache: false
   devtools:
     restart:
       enabled: true

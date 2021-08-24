@@ -8,6 +8,11 @@ class CommentSetApplicationTests {
 
     @Test
     void contextLoads() {
+
+        String target = "file.html";
+        target = target.substring(0, target.indexOf("."));
+        System.out.println(target);
+
     }
 
 }
