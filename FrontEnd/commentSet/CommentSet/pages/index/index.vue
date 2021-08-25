@@ -16,7 +16,9 @@
 				@transition="transition" 
 				@animationfinish="animationfinish">
 				<swiper-item class="swiper-item">
+					<view>
 					<scroll-view scroll-y @scrolltolower="reachBottom">
+					<!-- <scroll-view scroll-y> -->
 						<u-card v-for="(item,index) in commentList[0]" :key="item.commentId" :show-head="false">
 							<view class="" slot="body">
 								{{item.commentContent}}
@@ -30,6 +32,7 @@
 						</u-card>
 						<u-loadmore :status="loadStatus[0]"  bgColor="#f2f2f2" :load-text="loadText"></u-loadmore>
 					</scroll-view>
+					</view>
 				</swiper-item>
 				<swiper-item class="swiper-item">
 					b站热评，待开发
@@ -112,28 +115,27 @@ export default {
 		// this.getOrderList(this.currentPage[3]);
 	},
 	computed: {
-		// 日期格式化
-		// dateFormat() {
-		// 	return val =>{
-		// 		return val
-		// 	}
-		// }
 	},
 	onPullDownRefresh() {
 		this.commentList[this.current] = []
-		this.currentPage[this.current] = 0
+		this.currentPage[this.current] = 1
 		this.maxPage[this.current] = 1
-		
+		this.getOrderList(0)
 		setTimeout(()=>{
-			this.getOrderList(0)
 			uni.stopPullDownRefresh()
 		}, 1000)
+	},
+	onReachBottom() {
+		this.reachBottom();
 	},
 	methods: {
 		// 页面数据
 		async getOrderList(page) {
+			if(page <= this.currentPage[this.current]){
+				return
+			}
 			// 请求数据并赋值
-			await this.$u.get('/comment/all', {page: page,limit:5}).then(res => {
+			await this.$u.get('/comment/all', {page: page,limit:7}).then(res => {
 				let pageInfo = res.pageInfo
 				let records = pageInfo.records
 				for (let i = 0; i < records.length; i++) {
@@ -199,7 +201,7 @@ page {
 .swiper-box {
 	flex: 1;
 }
-.swiper-item {
+.swiper-item>view {
 	height: 100%;
 	display: flex;
 }

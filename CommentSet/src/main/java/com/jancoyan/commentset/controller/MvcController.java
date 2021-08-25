@@ -16,13 +16,13 @@ public class MvcController {
 
     @GetMapping("/workbench/{file}")
     public String workbenchResource(@PathVariable(value = "file") String file) {
-        return "/workbench/" + file;
+        return "workbench/" + file;
     }
 
     @GetMapping("/workbench/{file1}/{file2}")
     public String workbenchResource(
             @PathVariable(value = "file1") String file1,
             @PathVariable(value = "file2") String file2) {
-        return "/workbench/" + file1 + "/" + file2;
+        return "workbench/" + file1 + "/" + file2;
     }
 }

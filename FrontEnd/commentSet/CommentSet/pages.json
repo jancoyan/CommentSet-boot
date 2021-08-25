@@ -6,8 +6,15 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "逛逛",
-				"enablePullDownRefresh": true
+				"navigationBarTitleText": "逛逛"
+				// "enablePullDownRefresh": true,
+				// "app-plus": {
+				// 	"titleView": false,
+				// 	"pullToRefresh":{ //下拉样式配置
+				// 		"color":"black"
+				// 	}
+				// }
+				// "onReachBottomDistance":100
 			}
 		},
 		{
