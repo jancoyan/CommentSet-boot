@@ -10,4 +10,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface CommentService extends IService<Comment> {
     IPage<Comment> selectIndexComment(Integer page, Integer limit, String search);
+
+    IPage<Comment> getCommentByType(String typeId, Integer page, Integer limit);
 }

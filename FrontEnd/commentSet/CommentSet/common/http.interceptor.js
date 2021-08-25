@@ -2,6 +2,7 @@ const install = (Vue, vm) => {
 	// 此为自定义配置参数，具体参数见上方说明
 	Vue.prototype.$u.http.setConfig({
 		baseUrl: 'http://101.201.64.102:9090',
+		// baseUrl: 'http://localhost:9090',
 		loadingText: '努力加载中~',
 		loadingTime: 800,
 		// 设置自定义头部content-type
@@ -20,7 +21,7 @@ const install = (Vue, vm) => {
 			return res.extend;
 		} else {
 			// 假设201为token失效，这里跳转登录
-			vm.$u.toast('验证失败，请重新登录');
+			vm.$u.toast('网络连接失败');
 			// setTimeout(() => {
 				// 此为uView的方法，详见路由相关文档
 				// vm.$u.route('/pages/user/login')

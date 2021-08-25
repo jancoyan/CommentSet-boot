@@ -32,4 +32,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         wrapper.orderByDesc("post_date");
         return baseMapper.selectIndexComment(iPage, wrapper);
     }
+
+    @Override
+    public IPage<Comment> getCommentByType(String typeId, Integer page, Integer limit) {
+        QueryWrapper<Comment> wrapper = new QueryWrapper<>();
+        wrapper.eq("comment_type", typeId);
+        IPage<Comment> iPage = new Page<>(page, limit);
+        wrapper.orderByDesc("post_date");
+        return baseMapper.selectIndexComment(iPage, wrapper);
+    }
 }

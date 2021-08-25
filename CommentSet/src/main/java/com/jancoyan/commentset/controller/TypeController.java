@@ -48,11 +48,8 @@ public class TypeController {
                 type.deleteById();
             }else break;
         }
-
-
         return Msg.success();
     }
-
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Msg updateType(

@@ -34,6 +34,8 @@ public class Comment extends Model<Comment> {
 
     private Date postDate;
 
+    private Integer commentType;
+
     private Integer commentLikeCount;
 
     private Integer commentCollectCount;

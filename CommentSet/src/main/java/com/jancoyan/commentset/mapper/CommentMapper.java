@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface CommentMapper extends BaseMapper<Comment> {
 
     IPage<Comment> selectIndexComment(IPage<Comment> iPage,  Wrapper ew);
+
+
 }

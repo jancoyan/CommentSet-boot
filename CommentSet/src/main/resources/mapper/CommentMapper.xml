@@ -14,16 +14,17 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        comment_id, comment_author_id, comment_content, post_date, comment_like_count, comment_collect_count
+        comment_id, comment_author_id, comment_content, comment_type, post_date,
+        comment_like_count, comment_collect_count
     </sql>
     <!-- 全查找 -->
     <sql id="Column_List_with_user">
-        comment_id, user_name, comment_content, post_date, comment_like_count,
+        comment_id, user_name, comment_content, comment_type, post_date, comment_like_count,
         comment_collect_count
     </sql>
     <!-- 全查找 -->
     <sql id="Column_List_with_user_and_type">
-        comment_id, user_name, type_name, comment_content, post_date, comment_like_count,
+        comment_id, user_name, type_name, comment_content, comment_type, post_date, comment_like_count,
         comment_collect_count
     </sql>
 
