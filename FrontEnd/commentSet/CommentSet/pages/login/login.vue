@@ -1,11 +1,12 @@
 <template>
 	<view class="wrap">
-		<view class="top"></view>
 		<view class="content">
 			<view class="title">登录</view>
-			<input class="u-border-bottom" type="number" v-model="tel" placeholder="请输入账号" />
-			<input class="u-border-bottom" type="password" v-model="tel" placeholder="请输入密码" />
-			<button @tap="submit" class="getCaptcha">登录</button>
+			<form @submit="formSubmit">
+				<input class="u-border-bottom uni-form-item" name="username" placeholder="请输入用户名" />
+				<input class="u-border-bottom uni-form-item" type="password" name="password" placeholder="请输入密码" />
+				<button type="primary" form-type="submit" class="submitBtn">注册/登录</button>
+			</form>
 		</view>
 	</view>
 </template>
@@ -14,26 +15,29 @@
 export default {
 	data() {
 		return {
-			tel: ''
-		}
-	},
-	computed: {
-		inputStyle() {
-			let style = {};
-			if(this.tel) {
-				style.color = "#fff";
-				style.backgroundColor = this.$u.color['warning'];
-			}
-			return style;
+			
 		}
 	},
 	methods: {
-		submit() {
-			if(this.$u.test.mobile(this.tel)) {
-				this.$u.route({
-					url: 'pages/template/login/code'
-				})
-			}
+		formSubmit(e) {
+			let data = e.detail.value
+			let username = data.username
+			let password = data.password
+			// 发起注册或者登录的请求
+			this.$u.post('/user/login', {username: username, password: password }, {'Content-type':'application/x-www-form-urlencoded'}).then(res => {
+				let user = res.user
+				uni.setStorageSync("globalUser", user)
+				setTimeout(() => {
+					uni.showToast({
+						title:"登录成功",
+						duration:1000
+					})
+					// 跳转到个人中心
+					uni.switchTab({
+						url:'../home/home'
+					})
+				}, 1000)
+			});
 		}
 	}
 };
@@ -54,54 +58,22 @@ export default {
 		}
 		input {
 			text-align: left;
-			margin-bottom: 10rpx;
+			margin-bottom: 20rpx;
 			padding-bottom: 6rpx;
+			height: 50px;
+			line-height: 50px;
+			border-bottom: 1px solid #999999;
 		}
-		.tips {
-			color: $u-type-info;
-			margin-bottom: 60rpx;
-			margin-top: 8rpx;
-		}
-		.getCaptcha {
-			background-color: rgb(253, 243, 208);
-			color: $u-tips-color;
+		.submitBtn {
+			margin-top: 60rpx;
+			background-color: #007AFF;
+			color: white;
 			border: none;
-			font-size: 30rpx;
+			font-size: 35rpx;
 			padding: 12rpx 0;
 			
 			&::after {
 				border: none;
-			}
-		}
-		.alternative {
-			color: $u-tips-color;
-			display: flex;
-			justify-content: space-between;
-			margin-top: 30rpx;
-		}
-	}
-	.buttom {
-		.loginType {
-			display: flex;
-			padding: 350rpx 150rpx 150rpx 150rpx;
-			justify-content:space-between;
-			
-			.item {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				color: $u-content-color;
-				font-size: 28rpx;
-			}
-		}
-		
-		.hint {
-			padding: 20rpx 40rpx;
-			font-size: 20rpx;
-			color: $u-tips-color;
-			
-			.link {
-				color: $u-type-warning;
 			}
 		}
 	}

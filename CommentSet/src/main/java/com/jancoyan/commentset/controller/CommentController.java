@@ -40,7 +40,9 @@ public class CommentController {
 
     @RequestMapping(value = "/post")
     public Msg submitComment(
+            @RequestParam(value = "userId") String userId,
             @RequestParam(value = "content") String content,
+            @RequestParam(value = "typeId") String typeId,
             HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("utf-8");
         System.out.println(content);
@@ -48,8 +50,8 @@ public class CommentController {
         Comment comment = new Comment();
         comment.setCommentContent(content);
         comment.setPostDate(new Date());
-        // 注册功能有了之后再填充
-        comment.setCommentAuthorId(10000);
+        comment.setCommentAuthorId(Integer.parseInt(userId));
+        comment.setCommentType(Integer.parseInt(typeId));
         // 直接插入
         boolean suc = comment.insert();
         // 插入结果
@@ -58,6 +60,16 @@ public class CommentController {
         }else {
             return Msg.fail();
         }
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public Msg getUserComment(
+            @RequestParam(value = "userId")String userId,
+            @RequestParam(value = "page") Integer page,
+            @RequestParam(value = "limit") Integer limit
+    ){
+        IPage<Comment> iPage = service.getUserComment(userId, page, limit);
+        return Msg.success().add("pageInfo", iPage);
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
@@ -74,7 +86,6 @@ public class CommentController {
         }
         return Msg.success();
     }
-
 
     @RequestMapping(value = "/type", method = RequestMethod.GET)
     public Msg getCommentByType(

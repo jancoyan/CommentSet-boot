@@ -9,12 +9,9 @@ import com.jancoyan.commentset.pojo.User;
 import com.jancoyan.commentset.service.UserService;
 import com.jancoyan.commentset.utils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
@@ -31,13 +28,13 @@ public class UserController {
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Msg login(
-            @RequestParam(value = "username") String userName,
+            @RequestParam(value = "username") String username,
             @RequestParam(value = "password") String password,
             HttpSession session
     ){
         // 使用ActiveRecord进行查找
         QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_name", userName);
+        wrapper.eq("user_name", username);
         wrapper.eq("user_pwd", password);
         User user = new User();
         user = user.selectOne(wrapper);

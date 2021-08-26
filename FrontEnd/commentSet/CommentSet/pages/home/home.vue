@@ -1,35 +1,45 @@
 <template>
 	<view>
-		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30">
-			<view class="u-m-r-10">
-				<u-avatar :src="pic" size="140"></u-avatar>
+		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30" v-if="userIsLogin">
+			<view class="u-m-r-30">
+				<u-avatar src="../../static/logo.png" size="140"></u-avatar>
 			</view>
 			<view class="u-flex-1">
-				<view class="u-font-18 u-p-b-20">Jancoyan</view>
-				<view class="u-font-14 u-tips-color">ID:10000</view>
-			</view>
-			<view class="u-m-l-10 u-p-10">
-				<u-icon name="arrow-right" color="#969799" size="28"></u-icon>
+				<view class="u-font-18 u-p-b-25">{{userInfo.userName}}</view>
+				<view class="u-font-14 u-tips-color">ID: {{userInfo.userId}}</view>
 			</view>
 		</view>
+		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30" v-else>
+				<view class="u-m-r-30">
+					<u-avatar src="../../static/logo.png" size="140"></u-avatar>
+				</view>
+				<view class="u-flex-1">
+					<navigator url="../login/login">
+						<view class="u-font-18 u-p-b-20">登录/注册</view>
+					</navigator>
+				</view>
+				<view class="u-m-l-10 u-p-10">
+					<u-icon name="arrow-right" color="#969799" size="28"></u-icon>
+				</view>
+		</view>
 		
-		<view class="u-m-t-20">
+		<view class="u-m-t-20" v-if="userIsLogin">
 			<u-cell-group>
-				<u-cell-item icon="edit-pen" title="发布句子"></u-cell-item>
+				<u-cell-item icon="edit-pen" @click="postComment" title="发布句子"></u-cell-item>
 			</u-cell-group>
 		</view>
 		
-		<view class="u-m-t-20">
+		<view class="u-m-t-20" v-if="userIsLogin">
 			<u-cell-group>
-				<u-cell-item icon="list-dot" title="我发布的"></u-cell-item>
+				<u-cell-item icon="list-dot" title="我发布的" @click="gotoPersonalPost"></u-cell-item>
 				<u-cell-item icon="star" title="收藏"></u-cell-item>
 				<u-cell-item icon="heart" title="喜欢"></u-cell-item>
 			</u-cell-group>
 		</view>
 		
-		<view class="u-m-t-20">
+		<view class="u-m-t-20" v-if="userIsLogin">
 			<u-cell-group>
-				<u-cell-item icon="setting" title="设置"></u-cell-item>
+				<u-cell-item icon="setting" title="设置" @click='gotoSettings'></u-cell-item>
 			</u-cell-group>
 		</view>
 		<u-tabbar :list="tabbar" :mid-button="true" active-color=#5098FF></u-tabbar>	
@@ -40,8 +50,18 @@
 	export default {
 		data() {
 			return {
-				pic:'../../static/logo.png',
-				show:true
+				userIsLogin: false,
+				userInfo: {}
+			}
+		},
+		onShow() {
+			var _this = this
+			var userInfo = uni.getStorageSync("globalUser")
+			if(userInfo != null && userInfo != "" && userInfo != undefined){
+				_this.userIsLogin = true
+				this.userInfo = userInfo
+			} else {
+				_this.userIsLogin = false
 			}
 		},
 		onLoad() {
@@ -67,14 +87,28 @@
 			]
 		},
 		methods: {
-			
+			postComment(){
+				uni.switchTab({
+					url:'../add/add'
+				})
+			},
+			gotoSettings(){
+				uni.navigateTo({
+					url:'./settings'
+				})
+			},
+			gotoPersonalPost(){
+				uni.navigateTo({
+					url:'./userPost'
+				})
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
 page{
-	background-color: #ededed;
+	background-color: #f3f3f3;
 }
 
 .camera{
@@ -82,9 +116,10 @@ page{
 	height: 44px;
 	
 	&:active{
-		background-color: #ededed;
+		background-color: #f3f3f3;
 	}
 }
+
 .user-box{
 	background-color: #fff;
 }

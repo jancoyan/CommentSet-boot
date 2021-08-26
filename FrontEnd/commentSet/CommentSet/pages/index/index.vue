@@ -26,7 +26,7 @@
 					@refresherrefresh="onRefresh" 
 					@refresherrestore="onRestore" 
 					@scrolltolower="reachBottom">
-						<u-card v-for="(item,index) in comments" :show-head="false">
+						<u-card v-for="item in comments" :show-head="false">
 							<view class="" slot="body">
 								{{item.commentContent}}
 							</view>
@@ -37,7 +37,7 @@
 								<!-- <view class="collect"> 收藏 </view> -->
 							</view>
 						</u-card>
-						<u-loadmore :status="loadStatus[0]"  bgColor="#f2f2f2" :load-text="loadText"></u-loadmore>
+						<u-loadmore :status="loadStatus[index]"  bgColor="#f2f2f2" :load-text="loadText"></u-loadmore>
 					</scroll-view>
 				</swiper-item>
 			</swiper>
@@ -71,6 +71,7 @@ export default {
 			current: 0,
 			swiperCurrent: 0,
 			dx: 0,
+			nowTab: 0,
 			loadText:{
 				loadmore: '轻轻上拉加载更多 ( ╯▽╰)',
 				loading: '努力加载中 (○´･д･)ﾉ',
@@ -119,7 +120,7 @@ export default {
 			for(let i = 0; i < this.typeList.length; i++){
 				// 初始化一些参数
 				this.commentList.push([])
-				this.currentPage.push(0)
+				this.currentPage.push(1)
 				this.maxPage.push(1)
 				this.loadStatus.push('loadmore')
 				this.tabAndType.push(this.typeList[i].typeId)
@@ -133,7 +134,7 @@ export default {
 		 * @param {Number} page 为第几个tab刷新列表
 		 */
 		async getCommentList(page, typeId, tab){
-			if(page >= this.maxPage[tab]) return
+			if(page > this.maxPage[tab]) return
 			let url = '/comment/all'
 			let data = {
 				page: page,
@@ -157,7 +158,7 @@ export default {
 					this.commentList[tab].push(JSON.parse(JSON.stringify(records[i])))
 				}
 				this.maxPage[tab] = pageInfo.pages
-				this.currentPage[tab] = page
+				this.currentPage[tab] = page === 0 ? 1 : page
 			});
 			this.loadStatus.splice(tab,1,"loadmore")
 		},
@@ -185,7 +186,6 @@ export default {
 		// tab栏切换
 		change(index) {
 			this.swiperCurrent = index;
-			// this.getCommentList(0, this.tabAndType[this.current], this.current);
 		},
 		transition({ detail: { dx } }) {
 			this.$refs.tabs.setDx(dx);
@@ -202,6 +202,8 @@ export default {
 			}
 			this.loadStatus.splice(this.current,1,"loading")
 			this.getCommentList(this.currentPage[this.current] + 1, this.tabAndType[this.current], this.current)
+		},
+		debug(msg){
 		}
 	}
 };
@@ -229,7 +231,7 @@ page {
 	.wrap {
 		display: flex;
 		flex-direction: column;
-		height: calc(100vh - var(--window-top));
+		height: calc(100vh - var(--window-top) - var(--window-bottom));
 		// height: 750rpx;
 		width: 100%;
 	}
@@ -240,4 +242,5 @@ page {
 		height: 100%;
 		display: flex;
 	}
+	
 </style>

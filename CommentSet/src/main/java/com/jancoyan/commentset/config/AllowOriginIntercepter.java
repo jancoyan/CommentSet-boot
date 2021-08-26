@@ -18,7 +18,7 @@ public class AllowOriginIntercepter implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods","GET, POST, DELETE, PUT, HEAD");
-//        response.setHeader("Access-Control-Allow-Headers","X-Requested-With, Authorization, Content-Type");
+        response.setHeader("Access-Control-Allow-Headers","Authorization, Content-Type");
         return true;
     }
 

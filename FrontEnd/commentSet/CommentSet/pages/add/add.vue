@@ -11,20 +11,19 @@
 						v-model="commentText"
 						/>
 				</view>
-				<!-- <view class="uni-form-item uni-common-mt">
-					<view class="uni-list">
-						<view class="uni-list-cell">
-							<view class="uni-list-cell-left">
-								类别
-							</view>
-							<view class="uni-list-cell-db">
-								<picker @change="bindPickerChange" :value="typeIndex" :range="typeArray" range-key="name">
-									<view class="uni-input">{{typeArray[typeIndex].name}}</view>
-								</picker>
-							</view>
+				<view class="uni-list">
+					<view class="uni-list-cell">
+						<view class="uni-list-cell-left">
+							类型
+						</view>
+						<view class="uni-list-cell-db">
+							<picker @change="bindPickerChange" :value="index" :range="array" range-key="name">
+								<label class="uni-input">{{array[index].name}}</label>
+							</picker>
 						</view>
 					</view>
-				</view> -->
+				</view>
+				
 				<view class="uni-btn-v submit-comment">
 					<button type="primary" form-type="submit">提交</button>
 					<button @click="resetComment">重置</button>
@@ -41,8 +40,30 @@
 		data() {
 			return {
 				commentText: "",
-				typeArray: [{name:'无'},{name:'网抑云热评'},{name: 'b站热评'}, {name:'某音热评'}],
-				typeIndex: 0
+				array: [{name:'中国'},{name: '美国'}, {name:'巴西'}, {name:'日本'}],
+				index: 0,
+				userInfo: {}
+			}
+		},
+		onShow() {
+			var _this = this
+			var userInfo = uni.getStorageSync("globalUser")
+			if(userInfo != null && userInfo != "" && userInfo != undefined){
+				this.userInfo = userInfo
+			} else {
+				uni.showModal({
+					content: '请先登录',
+					success: function (res) {
+						uni.navigateTo({
+							url:'../login/login'
+						})
+					},
+					fail: function(res) {
+						uni.navigateTo({
+							url:'../index/index'
+						})
+					}
+				})
 			}
 		},
 		onLoad() {
@@ -70,7 +91,7 @@
 		methods: {
 			bindPickerChange: function(e) {
 				console.log('picker发送选择改变，携带值为：' + e.detail.value)
-				this.typeIndex = e.detail.value
+				this.index = e.detail.value
 			},
 			formSubmit: function(e) {
 				var formdata = e.detail.value
@@ -80,7 +101,14 @@
 					})
 					return
 				}
+				this.debug(JSON.stringify(formdata))
 				var _this = this
+				/**
+				 * userId
+				 * content
+				 * typeId
+				 */
+				
 				this.$u.get('/comment/post', {content: formdata.content}).then(res => {
 					uni.showToast({
 						title:"成功"
@@ -98,6 +126,9 @@
 						}
 					}
 				})
+			},
+			debug(msg){
+				console.log(msg)
 			}
 		}
 	}
@@ -119,6 +150,29 @@
 		border-radius: 10px;
 		border: 1px solid #cccccc;
 		padding: 10px;
+	}
+	
+	.uni-list-cell{
+		margin: 20px;
+		display: flex;
+		font-size: 17px;
+		border-top: 1px solid #bdbdbd;
+		border-bottom: 1px solid #bdbdbd;
+		view{
+			padding: 5px;
+			
+		}
+		
+		.uni-list-cell-left{
+			color: #8a8a8a;
+		}
+		.uni-list-cell-db{
+			width: 550rpx;
+			picker{
+				display: block;
+			}
+		}
+		
 	}
 
 </style>

@@ -12,4 +12,6 @@ public interface CommentService extends IService<Comment> {
     IPage<Comment> selectIndexComment(Integer page, Integer limit, String search);
 
     IPage<Comment> getCommentByType(String typeId, Integer page, Integer limit);
+
+    IPage<Comment> getUserComment(String userId, Integer page, Integer limit);
 }
