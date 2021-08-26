@@ -17,8 +17,8 @@
 							类型
 						</view>
 						<view class="uni-list-cell-db">
-							<picker @change="bindPickerChange" :value="index" :range="array" range-key="name">
-								<label class="uni-input">{{array[index].name}}</label>
+							<picker @change="bindPickerChange" :value="index" :range="typeList" range-key="typeName">
+								<label class="uni-input">{{typeList[index].typeName}}</label>
 							</picker>
 						</view>
 					</view>
@@ -40,12 +40,20 @@
 		data() {
 			return {
 				commentText: "",
-				array: [{name:'中国'},{name: '美国'}, {name:'巴西'}, {name:'日本'}],
 				index: 0,
-				userInfo: {}
+				userInfo: {},
+				typeList: []
 			}
 		},
 		onShow() {
+			// 加载类型 picker
+			let typeList = uni.getStorageSync("typeList")
+			if(typeList != null && typeList != "" && typeList != undefined){
+				this.typeList = typeList
+			} else {
+				this.getTypeList()
+			}
+			this.typeList[0].typeName = "默认"
 			var _this = this
 			var userInfo = uni.getStorageSync("globalUser")
 			if(userInfo != null && userInfo != "" && userInfo != undefined){
@@ -90,7 +98,6 @@
 		},
 		methods: {
 			bindPickerChange: function(e) {
-				console.log('picker发送选择改变，携带值为：' + e.detail.value)
 				this.index = e.detail.value
 			},
 			formSubmit: function(e) {
@@ -103,17 +110,14 @@
 				}
 				this.debug(JSON.stringify(formdata))
 				var _this = this
-				/**
-				 * userId
-				 * content
-				 * typeId
-				 */
-				
-				this.$u.get('/comment/post', {content: formdata.content}).then(res => {
+				this.$u.post('/comment/post', {
+					userId: this.userInfo.userId,content: formdata.content,typeId: this.typeList[this.index].typeId},
+					 {'Content-type':'application/x-www-form-urlencoded'}).then(res => {
 					uni.showToast({
 						title:"成功"
 					})
 					_this.commentText = ""
+					_this.index = 0
 				});
 			},
 			resetComment: function(){
@@ -125,6 +129,11 @@
 							_this.commentText = ""
 						}
 					}
+				})
+			},
+			async getTypeList(){
+				await this.$u.get('/type/all',{}).then(res => {
+					this.typeList = res.pageInfo.records
 				})
 			},
 			debug(msg){
@@ -159,7 +168,7 @@
 		border-top: 1px solid #bdbdbd;
 		border-bottom: 1px solid #bdbdbd;
 		view{
-			padding: 5px;
+			padding: 10px;
 			
 		}
 		

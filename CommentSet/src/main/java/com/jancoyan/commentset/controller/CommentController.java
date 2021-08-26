@@ -38,7 +38,7 @@ public class CommentController {
         return Msg.success().add("pageInfo", iPage);
     }
 
-    @RequestMapping(value = "/post")
+    @RequestMapping(value = "/post", method = RequestMethod.POST)
     public Msg submitComment(
             @RequestParam(value = "userId") String userId,
             @RequestParam(value = "content") String content,

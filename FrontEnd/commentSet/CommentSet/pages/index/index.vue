@@ -127,6 +127,10 @@ export default {
 				// 获取标签对应的数据，第1页，类型为i
 				this.getCommentList(0, this.typeList[i].typeId, i)
 			}
+			
+			// 把type存到同步缓存中
+			uni.setStorageSync("typeList", this.typeList)
+			
 		},
 		/**
 		 * @param {Object} page 要拿到第几页的数据

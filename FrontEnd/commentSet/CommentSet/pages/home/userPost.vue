@@ -28,8 +28,12 @@
 			}
 			this.getCommentList(0)
 		},
+		onReachBottom() {
+			this.getCommentList(this.currentPage + 1)
+		},
 		methods: {
 			deleteComment(commentId){
+				let _this = this
 				uni.showModal({
 					title:'确定删除？',
 					content:'删除之后无法复原',
@@ -37,11 +41,20 @@
 					confirmColor:'#f00',
 					success:function(){
 						// 删除逻辑
+						_this.$u.post('/comment/delete', {ids: commentId}, {'Content-type':'application/x-www-form-urlencoded'}).then(res => {
+							uni.showToast({
+								title:'删除成功',
+								duration:1000
+							})
+							_this.getCommentList(0)
+						});
 					}
 				})
 			},
-			getCommentList(page){
-				this.$u.get('/comment/user', {userId:this.userInfo.userId, page:page, limit:10}).then(res => {
+			async getCommentList(page){
+				if(page > this.maxPage) return
+				if(page === 0) this.commentList = []
+				await this.$u.get('/comment/user', {userId:this.userInfo.userId, page:page, limit:10}).then(res => {
 					let pageInfo = res.pageInfo
 					let records = pageInfo.records
 					for (let i = 0; i < records.length; i++) {
@@ -52,7 +65,6 @@
 					this.currentPage = page === 0 ? 1 : page
 				});
 			}
-			
 		}
 	};
 </script>
