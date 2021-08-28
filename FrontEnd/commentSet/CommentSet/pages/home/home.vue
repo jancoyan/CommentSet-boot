@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30" v-if="userIsLogin">
+		<view class="u-flex user-box u-p-l-30 u-p-r-20 u-p-b-30" v-if="userIsLogin" @click="userDetails">
 			<view class="u-m-r-30">
-				<u-avatar src="../../static/logo.png" size="140"></u-avatar>
+				<u-avatar src="../../static/logo.png" level-bg-color="#ebca0d" :show-level="true" size="140"></u-avatar>
 			</view>
 			<view class="u-flex-1">
 				<view class="u-font-18 u-p-b-25">{{userInfo.userName}}</view>
@@ -32,8 +32,7 @@
 		<view class="u-m-t-20" v-if="userIsLogin">
 			<u-cell-group>
 				<u-cell-item icon="list-dot" title="我发布的" @click="gotoPersonalPost"></u-cell-item>
-				<u-cell-item icon="star" title="收藏"></u-cell-item>
-				<u-cell-item icon="heart" title="喜欢"></u-cell-item>
+				<u-cell-item icon="star" title="收藏夹" @click="gotoFavList"></u-cell-item>
 			</u-cell-group>
 		</view>
 		
@@ -55,13 +54,12 @@
 			}
 		},
 		onShow() {
-			var _this = this
-			var userInfo = uni.getStorageSync("globalUser")
-			if(userInfo != null && userInfo != "" && userInfo != undefined){
-				_this.userIsLogin = true
+			var userInfo = this.getGlobalUser("globalUser")
+			if(userInfo != null){
+				this.userIsLogin = true
 				this.userInfo = userInfo
 			} else {
-				_this.userIsLogin = false
+				this.userIsLogin = false
 			}
 		},
 		onLoad() {
@@ -87,6 +85,11 @@
 			]
 		},
 		methods: {
+			userDetails(){
+				uni.navigateTo({
+					url:'./user-info'
+				})
+			},
 			postComment(){
 				uni.switchTab({
 					url:'../add/add'
@@ -100,6 +103,11 @@
 			gotoPersonalPost(){
 				uni.navigateTo({
 					url:'./userPost'
+				})
+			},
+			gotoFavList(){
+				uni.navigateTo({
+					url:'./favlist'
 				})
 			}
 		}

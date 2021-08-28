@@ -6,7 +6,10 @@
 				<u-cell-item icon="trash-fill" title="清除缓存" :arrow="false" @click="cleanStorage">
 					<u-loading u-slot="icon" mode="circle" color="#2c8bff" :show="showLoading"></u-loading>
 				</u-cell-item>
-				
+			</u-cell-group>
+			<u-cell-group>
+				<u-cell-item icon="minus-circle-fill" title="退出登录" :arrow="false" @click="logout">
+				</u-cell-item>
 			</u-cell-group>
 		</view>
 	</view>
@@ -22,13 +25,27 @@
 		methods: {
 			cleanStorage(){
 				this.showLoading = true
+				uni.clearStorageSync()
 				setTimeout(()=>{
 					this.showLoading = false
 					uni.showToast({
 						title:"已清除ヾ(^▽^*)))",
-						duration:1000
+						duration:1500
 					})
 				}, 1000)
+			},
+			logout(){
+				var user = this.getGlobalUser("globalUser")
+				this.$u.post('/user/logout', {
+					userId: user.userId}).then(res => {
+						if(res.rst){
+							uni.removeStorageSync("globalUser")
+							uni.switchTab({
+								url:'./home'
+							})
+						}
+				});
+				
 			}
 		}
 	}

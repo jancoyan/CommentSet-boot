@@ -27,3 +27,13 @@ export function createApp() {
   }
 }
 // #endif
+
+
+Vue.prototype.getGlobalUser = function(){
+	var userInfo = uni.getStorageSync("globalUser")
+	if(userInfo != null && userInfo != "" && userInfo != undefined){
+		return userInfo
+	} else {
+		return null
+	}
+}

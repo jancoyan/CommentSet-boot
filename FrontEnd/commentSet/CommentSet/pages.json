@@ -52,6 +52,33 @@
             }
             
         }
+        ,{
+            "path" : "pages/login/register",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "注册",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/home/user-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "详细信息",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/home/favlist",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "收藏夹",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

@@ -8,8 +8,7 @@
 						placeholder="请输入" 
 						maxlength="500"
 						auto-height
-						v-model="commentText"
-						/>
+						v-model="commentText"/>
 				</view>
 				<view class="uni-list">
 					<view class="uni-list-cell">
@@ -50,26 +49,29 @@
 			let typeList = uni.getStorageSync("typeList")
 			if(typeList != null && typeList != "" && typeList != undefined){
 				this.typeList = typeList
+				this.typeList[0].typeName = "默认"
 			} else {
 				this.getTypeList()
 			}
-			this.typeList[0].typeName = "默认"
+			// console.log(this.typeList)
 			var _this = this
-			var userInfo = uni.getStorageSync("globalUser")
-			if(userInfo != null && userInfo != "" && userInfo != undefined){
+			var userInfo = this.getGlobalUser("globalUser")
+			if(userInfo != null){
 				this.userInfo = userInfo
 			} else {
 				uni.showModal({
+					title:'提示',
 					content: '请先登录',
 					success: function (res) {
-						uni.navigateTo({
-							url:'../login/login'
-						})
-					},
-					fail: function(res) {
-						uni.navigateTo({
-							url:'../index/index'
-						})
+						if(res.confirm){
+							uni.navigateTo({
+								url:'../login/login'
+							})
+						} else if (res.cancel){
+							uni.switchTab({
+								url:'../index/index'
+							})
+						}
 					}
 				})
 			}
@@ -101,6 +103,26 @@
 				this.index = e.detail.value
 			},
 			formSubmit: function(e) {
+				// 在没有登录的情况下进来
+				if(this.getGlobalUser() === null){
+					uni.showModal({
+						title:'提示',
+						content: '请先登录',
+						success: function (res) {
+							if(res.confirm){
+								uni.navigateTo({
+									url:'../login/login'
+								})
+							} else if (res.cancel){
+								uni.switchTab({
+									url:'../index/index'
+								})
+							}
+						}
+					})
+					return
+				}
+				
 				var formdata = e.detail.value
 				if(formdata.content === ""){
 					uni.showModal({
@@ -111,8 +133,7 @@
 				this.debug(JSON.stringify(formdata))
 				var _this = this
 				this.$u.post('/comment/post', {
-					userId: this.userInfo.userId,content: formdata.content,typeId: this.typeList[this.index].typeId},
-					 {'Content-type':'application/x-www-form-urlencoded'}).then(res => {
+					userId: this.userInfo.userId,content: formdata.content,typeId: this.typeList[this.index].typeId}).then(res => {
 					uni.showToast({
 						title:"成功"
 					})
@@ -135,6 +156,7 @@
 				await this.$u.get('/type/all',{}).then(res => {
 					this.typeList = res.pageInfo.records
 				})
+				this.typeList[0].typeName = "默认"
 			},
 			debug(msg){
 				console.log(msg)

@@ -22,8 +22,8 @@
 		},
 		onShow() {
 			var _this = this
-			var userInfo = uni.getStorageSync("globalUser")
-			if(userInfo != null && userInfo != "" && userInfo != undefined){
+			var userInfo = this.getGlobalUser("globalUser")
+			if(userInfo != null){
 				this.userInfo = userInfo
 			}
 			this.getCommentList(0)

@@ -12,6 +12,7 @@
 					:is-scroll="false" 
 					swiperWidth="750"></u-tabs-swiper>
 			</view>
+			<u-select v-model="showfavlist" :list="favlist"></u-select>
 			<u-top-tips ref="uTips"></u-top-tips>
 			<swiper class="swiper-box" 
 				:current="swiperCurrent" 
@@ -33,8 +34,13 @@
 							<view class="info" slot="foot">
 								<view class="author"> {{item.userName}} </view>
 								<view class="date"> {{item.postDate}} </view>
-								<!-- <view class="like"> 点赞 </view> -->
-								<!-- <view class="collect"> 收藏 </view> -->
+								<view style="margin-right: 10px;" @click="addToFavList(item.commentId)">
+									<u-icon name="star" size="40"></u-icon>
+								</view>
+								<view>
+									<u-icon name="heart-fill" size="40" color="#f00" @click="likeComment(item.commentId)"></u-icon>
+									<text style="color:#f00;margin-left: 5px;">{{item.commentLikeCount}}</text>
+								</view>
 							</view>
 						</u-card>
 						<u-loadmore :status="loadStatus[index]"  bgColor="#f2f2f2" :load-text="loadText"></u-loadmore>
@@ -69,6 +75,9 @@ export default {
 			_freshing: false,
 			// 滑动用的, swipercurrent 和 current 都是当前所在swiper
 			current: 0,
+			// 显示收藏夹的选择器
+			favlist: [],
+			showfavlist: true,
 			swiperCurrent: 0,
 			dx: 0,
 			nowTab: 0,
@@ -186,6 +195,12 @@ export default {
 		onRestore() {
 			this.triggered = false // 需要重置
 			this._freshing = false // 需要重置
+		},
+		addToFavList(commentId){
+			console.log(commentId)
+		},
+		likeComment(commentId){
+			console.log(commentId)
 		},
 		// tab栏切换
 		change(index) {

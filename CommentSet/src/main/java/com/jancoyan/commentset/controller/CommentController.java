@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import javax.management.Query;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.swing.event.InternalFrameAdapter;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -96,6 +97,30 @@ public class CommentController {
         IPage<Comment> iPage = service.getCommentByType(typeId, page, limit);
         return Msg.success().add("pageInfo", iPage);
     }
+
+    @RequestMapping(value = "/like", method = RequestMethod.GET)
+    public Msg likeComment(
+            @RequestParam(value = "commentId") String commentId
+    ){
+        Comment comment = new Comment();
+        comment.setCommentId(Integer.parseInt(commentId));
+        comment = comment.selectById();
+        comment.setCommentLikeCount(comment.getCommentLikeCount() + 1);
+        comment.updateById();
+        return Msg.success();
+    }
+
+    @RequestMapping(value = "/addtofavlist", method = RequestMethod.POST)
+    public Msg addToFavlist(
+            @RequestParam(value = "commentId") String commentId,
+            @RequestParam(value = "collectionId") String collectionId,
+            HttpSession session
+    ){
+
+
+        return Msg.success();
+    }
+
 
 }
 

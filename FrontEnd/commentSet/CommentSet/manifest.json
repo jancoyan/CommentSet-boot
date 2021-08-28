@@ -63,7 +63,8 @@
                 "speech" : {
                     "ifly" : {}
                 },
-                "ad" : {}
+                "ad" : {},
+                "oauth" : {}
             },
             "orientation" : [ "portrait-primary" ],
             "icons" : {

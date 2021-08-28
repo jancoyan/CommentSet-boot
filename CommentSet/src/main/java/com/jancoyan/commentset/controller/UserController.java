@@ -1,19 +1,17 @@
 package com.jancoyan.commentset.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.jancoyan.commentset.pojo.Type;
 import com.jancoyan.commentset.pojo.User;
 import com.jancoyan.commentset.service.UserService;
 import com.jancoyan.commentset.utils.Msg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
-
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * @author Jancoyan
@@ -45,6 +43,13 @@ public class UserController {
         return Msg.success().add("user", user);
     }
 
+    @RequestMapping(value = "logout", method = RequestMethod.POST)
+    public Msg logout(
+            String userId,
+            HttpSession session){
+        session.removeAttribute("user");
+        return Msg.success().add("rst", true);
+    }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public Msg getAll(
@@ -55,8 +60,25 @@ public class UserController {
         return Msg.success().add("pageInfo", iPage);
     }
 
-
-
-
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public  Msg register(
+            @RequestParam(value = "username")String username,
+            @RequestParam(value = "password")String password,
+            HttpServletRequest request
+    ){
+        User user = new User();
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("user_name", username);
+        int count = user.selectCount(wrapper);
+        if(count != 0){
+            return Msg.fail().add("msg", "用户名已经被注册了");
+        }
+        user.setUserName(username);
+        user.setCreateDate(new Date());
+        user.setUserPwd(password);
+        user.setUserIp(request.getRemoteAddr());
+        user.insert();
+        return Msg.success().add("user", user);
+    }
 }
 
